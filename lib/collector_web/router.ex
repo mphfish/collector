@@ -17,7 +17,8 @@ defmodule CollectorWeb.Router do
   scope "/", CollectorWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", LiveMetricController, :index
+    get "/history", HistoryController, :index
   end
 
   # Other scopes may use custom stacks.

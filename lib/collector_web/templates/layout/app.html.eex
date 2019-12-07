@@ -7,8 +7,21 @@
     <title>Collector</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js"></script>
   </head>
   <body>
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <a href="<%= Routes.live_metric_path(@conn, :index) %>">Live</a>
+          </li>
+          <li>
+            <a href="<%= Routes.history_path(@conn, :index) %>">History</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
     <main role="main" class="container">
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>

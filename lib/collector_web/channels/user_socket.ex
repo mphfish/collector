@@ -1,6 +1,7 @@
 defmodule CollectorWeb.UserSocket do
   use Phoenix.Socket
 
+  channel "feed:*", CollectorWeb.FeedChannel
   ## Channels
   # channel "room:*", CollectorWeb.RoomChannel
 

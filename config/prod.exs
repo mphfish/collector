@@ -12,7 +12,7 @@ use Mix.Config
 config :collector, CollectorWeb.Endpoint,
   http: [:inet6, port: System.get_env("PORT") || 4000],
   # This is critical for ensuring web-sockets properly authorize.
-  url: [host: "192.168.1.230", port: System.get_env("PORT")],
+  url: [host: "mph-pi-01.local", port: System.get_env("PORT")],
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
   root: ".",
