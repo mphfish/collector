@@ -6,12 +6,13 @@ defmodule Collector.Metrics.Metric do
   schema "metrics" do
     field :name
     field :source
-    field :data, :map
+    field :unit
+    field :value, :float
 
     timestamps(inserted_at: :created_at)
   end
 
   def changeset(metric, attrs \\ %{}) do
-    cast(metric, attrs, [:name, :data, :source])
+    cast(metric, attrs, [:name, :source, :unit, :value])
   end
 end

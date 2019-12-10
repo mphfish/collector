@@ -24,6 +24,7 @@ defmodule CollectorWeb.Router do
   # Other scopes may use custom stacks.
   scope "/api", CollectorWeb do
     pipe_through :api
+    get "/metrics/:source/:name/history", MetricController, :history
     resources "/metrics", MetricController, only: [:create]
   end
 end

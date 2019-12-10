@@ -26,5 +26,9 @@ import App from "./react_app"
 import ReactDOM from "react-dom"
 import React from "react"
 
-ReactDOM.render(<App />, document.getElementById("chart-app"))
+const chartDiv = document.getElementById("chart-app")
+
+if (chartDiv) {
+    ReactDOM.render(<App />, chartDiv)
+}
 

@@ -10,83 +10,27 @@ defmodule CollectorWeb.MetricDisplayView do
   def render(assigns) do
     ~L"""
     <div class="metric-container">
-    <%= for {source, metrics} <- Enum.map(@metrics, fn value -> value end) do %>
-    <div class="source">
-    <header>
-    <%= source %>
-    </header>
-    <div class="metric-group">
-    <%= for %{name: name, data: data, history: history} = metric <- metrics do %>
-    <div class="metric-card <%= color_class(metric) %>">
-    <header>
-    <%= name %>
-    </header>
-    <main>
-    <script>
-
-    const labels<%= name %> = [
-      <%= reduce_labels(history) %>
-    ].map(Date)
-
-    const data<%= name %> = {
-      labels: labels<%= name %>,
-      datasets: [
-        {
-          values: [
-            <%= reduce_values(history) %>
-          ]
-        }
-      ]
-    }
-    </script>
-    <div id="<%= name %>chart"></div>
-    <script>
-    new frappe.Chart("#<%= name %>chart", {
-      data: data<%= name %>,
-      type: "line",
-      height: 140,
-      colors: ["red"]
-    })
-    </script>
-    <%= for value <- Map.values(data) do %>
-    <%= value %><sup><%= unit(metric) %><sup>
-    <% end %>
-    </main>
-    </div>
-    <% end %>
-    </div>
-    </div>
-    <% end %>
+      <%= for {source, metrics} <- Enum.map(@metrics, fn value -> value end) do %>
+        <div class="source">
+          <header>
+            <%= source %>
+          </header>
+          <div class="metric-group">
+            <%= for %{name: name, value: value} = metric <- metrics do %>
+              <div class="metric-card <%= color_class(metric) %>">
+                <header>
+                  <%= name %>
+                </header>
+              <main>
+              <%= value %><sup><%= unit(metric) %><sup>
+              </main>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <% end %>
     </div>
     """
-  end
-
-  def reduce_labels(history) do
-    Enum.reduce(
-      history,
-      "",
-      fn
-        %{created_at: created_at}, "" ->
-          "#{created_at |> DateTime.from_naive!("Etc/UTC") |> DateTime.to_unix()}"
-
-        %{created_at: created_at}, acc ->
-          acc <> "," <> "#{created_at |> DateTime.from_naive!("Etc/UTC") |> DateTime.to_unix()}"
-      end
-    )
-  end
-
-  def reduce_values(history) do
-    Enum.reduce(
-      history,
-      "",
-      fn
-        metric, "" ->
-          "#{value_from_metric(metric)}"
-
-        metric, acc ->
-          acc <> "," <> "#{value_from_metric(metric)}"
-      end
-    )
   end
 
   def value_from_metric(%{data: %{"temp" => temp}}), do: temp

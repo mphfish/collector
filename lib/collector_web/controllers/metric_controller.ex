@@ -10,4 +10,9 @@ defmodule CollectorWeb.MetricController do
       |> render("show.json", metric: metric)
     end
   end
+
+  def history(conn, params) do
+    conn
+    |> json(Collector.Metrics.history(params))
+  end
 end

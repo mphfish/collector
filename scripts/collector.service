@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=pi
-Group=pi
+User=mphfish
+Group=mphfish
 WorkingDirectory=/opt/app
 ExecStart=/opt/app/bin/collector foreground
 Restart=on-failure

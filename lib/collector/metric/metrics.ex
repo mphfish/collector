@@ -9,6 +9,8 @@ defmodule Collector.Metrics do
 
   def get!(id), do: Collector.Repo.get!(Collector.Metrics.Metric, id)
 
+  @spec create(:invalid | %{optional(:__struct__) => none, optional(atom | binary) => any}) ::
+          {:error, any} | {:ok, Collector.Metrics.Metric.t()}
   def create(attrs) do
     %Collector.Metrics.Metric{}
     |> Collector.Metrics.Metric.changeset(attrs)
@@ -31,7 +33,6 @@ defmodule Collector.Metrics do
   def list(%{"source" => source} = params) do
     limit = params["limit"] || 20
     offset = params["offset"] || 0
-    IO.puts("some shit")
 
     from(
       m in Collector.Metrics.Metric,
@@ -58,16 +59,40 @@ defmodule Collector.Metrics do
   end
 
   @spec history(map()) :: [Collector.Metrics.Metric.t()]
-  def history(%{name: name} = params) do
-    from(
-      m in Collector.Metrics.Metric,
-      limit: ^10,
-      order_by: [desc: m.created_at],
-      where: m.name == ^name
-    )
-    |> Collector.Repo.all()
-    |> Enum.reverse()
+  def history(%{"source" => source, "name" => name} = params) do
+    base_query =
+      from(
+        m in Collector.Metrics.Metric,
+        where: m.name == ^name and m.source == ^source,
+        select: %{
+          avg: avg(m.value),
+          min: min(m.value),
+          max: max(m.value)
+        }
+      )
+
+    %{
+      all_time:
+        base_query
+        |> time(%{})
+        |> Collector.Repo.one(),
+      last_24:
+        base_query
+        |> time(%{"timeframe" => "24h"})
+        |> Collector.Repo.one()
+    }
   end
+
+  import Collector.Query
+
+  defp time(query, %{"timeframe" => "24h"}) do
+    now = DateTime.utc_now()
+
+    twenty_four_hours_ago = Timex.shift(now, hours: -24)
+    where(query, [m], between(m.created_at, ^twenty_four_hours_ago, ^now))
+  end
+
+  defp time(query, _), do: query
 
   defp notify_subscribers({:ok, %Collector.Metrics.Metric{source: source} = metric}, event) do
     Phoenix.PubSub.broadcast(
@@ -81,13 +106,9 @@ defmodule Collector.Metrics do
 
   defp notify_subscribers({:error, reason}, _event), do: {:error, reason}
 
-  defp transform_metric(%{name: name, data: data} = value) do
-    data = data |> Map.values() |> hd
-
+  defp transform_metric(value) do
     value
     |> Map.from_struct()
-    |> Map.take([:created_at, :name])
-    |> Map.put(name, data)
-    |> Map.drop([:data])
+    |> Map.take([:created_at, :name, :unit, :value, :source])
   end
 end
