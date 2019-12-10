@@ -2,101 +2,126 @@
 
 @import "./phoenix.css";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
-html, body {
-    height: 100%;
+html,
+body {
+  height: 100%;
 }
 body {
-    background-color: rgb(20, 20, 20);
-    color: rgb(240, 240, 240);
-    font-family: 'Roboto', sans-serif;
-    padding: 0;
-    margin: 0;
+  background-color: rgb(20, 20, 20);
+  color: rgb(240, 240, 240);
+  font-family: "Roboto", sans-serif;
+  padding: 0;
+  margin: 0;
 }
 
-
 .metric-container {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .metric-group {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-around;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-around;
 }
 
 .source > header {
-    font-size: 3.2rem;
-    text-transform: lowercase;
-    font-weight: 900;
-    letter-spacing: 3px;
-    padding: 0 2rem;
+  font-size: 3.2rem;
+  text-transform: lowercase;
+  font-weight: 900;
+  letter-spacing: 3px;
+  padding: 0 2rem;
 }
 
 .metric-card {
-    display: block;
-    width: 25%;
-    min-width: 400px;
-    box-shadow: 0px 0px 5px rgba(160, 160, 160, 0.1);
-    margin: 1em;
+  display: block;
+  width: 25%;
+  min-width: 400px;
+  box-shadow: 0px 0px 5px rgba(160, 160, 160, 0.1);
+  margin: 1em;
 }
 
 .metric-card header {
-    text-transform: capitalize;
-    font-size: 3.4rem;
-    font-weight: 100;
-    box-shadow: 0px 2px 1px rgba(60, 60, 60, 0.05);
-    padding: 1rem;
+  text-transform: capitalize;
+  font-size: 3.4rem;
+  font-weight: 100;
+  box-shadow: 0px 2px 1px rgba(60, 60, 60, 0.05);
+  padding: 1rem;
 }
 
 .metric-card main {
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    min-height: 175px;
-    font-size: 9rem;
-    padding: 10px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  min-height: 175px;
+  font-size: 9rem;
+  padding: 10px;
 }
 
 .high {
-    background-color: #D50000;
+  background-color: #d50000;
 }
 
 .low {
-    background-color: #1E88E5;
+  background-color: #1e88e5;
 }
 
 .normal {
-    background-color: #2E7D32;
+  background-color: #2e7d32;
 }
 
 nav {
-    position: sticky;
-    box-shadow: 0px 1px 1px rgba(220, 220, 220, 0.1);
+  position: sticky;
+  box-shadow: 0px 1px 1px rgba(220, 220, 220, 0.1);
 }
 
 header ul {
-    display: flex;
-    list-style-type: none;
-    margin-bottom: 0;
-    justify-content: flex-end;
+  display: flex;
+  list-style-type: none;
+  margin-bottom: 0;
+  justify-content: flex-end;
 }
 
 header ul li {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 header ul li a {
-    color: white;
-    padding: 1em 1.5em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s ease-in-out;
-    font-size: 2.5rem;
+  color: white;
+  padding: 1em 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease-in-out;
+  font-size: 2.5rem;
 }
 
 header ul li a:hover {
-    background-color: rgba(60, 60, 60, 0.2);
+  background-color: rgba(60, 60, 60, 0.2);
+}
+
+.chart-container {
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  align-items: baseline;
+  justify-content: space-evenly;
+  padding: 10px;
+}
+
+.metric-history-chart {
+  margin-bottom: 2rem;
+  max-width: 95%;
+}
+
+.metric-history-chart footer * {
+  margin-bottom: 0;
+}
+
+.stats-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

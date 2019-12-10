@@ -44,7 +44,11 @@ defmodule Collector.Metrics do
     |> Enum.reverse()
     |> Enum.group_by(& &1.name)
     |> Enum.into(%{}, fn {key, values} ->
-      {key, Enum.map(values, &transform_metric/1)}
+      {key,
+       %{
+         ticks: Enum.map(values, &transform_metric/1),
+         history: history(%{"source" => source, "name" => key})
+       }}
     end)
   end
 

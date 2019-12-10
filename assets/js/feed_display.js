@@ -16,7 +16,8 @@ const reducer = (state, action) => {
       return Object.entries(action.payload)
         .map(([name, data]) => ({
           [name]: {
-            ticks: data.map(transformMetric)
+            ...data,
+            ticks: data.ticks.map(transformMetric)
           }
         }))
         .reduce((acc, curr) => ({
@@ -26,10 +27,6 @@ const reducer = (state, action) => {
 
     case "set_history":
       const { payload } = action;
-
-      console.log(payload);
-      console.log(state);
-
       return {
         ...state,
         [payload.name]: {
@@ -124,16 +121,7 @@ const FeedDisplay = ({ feed }) => {
   }, [channel]);
 
   return (
-    <div
-      style={{
-        height: "100%",
-        display: "flex",
-        flexWrap: "wrap",
-        width: "100%",
-        alignItems: "center",
-        justifyContent: "center"
-      }}
-    >
+    <div className="chart-container">
       {Object.entries(groupedMetrics).map(([source, data]) => (
         <MetricHistoryChart source={source} key={source} data={data} />
       ))}
@@ -141,10 +129,7 @@ const FeedDisplay = ({ feed }) => {
   );
 };
 
-const domainFromLast24Hours = ({ min, max }) => {
-  console.log([min * 0.99, max * 1.01]);
-  return [min * 0.99, max * 1.01];
-};
+const domainFromLast24Hours = ({ min, max }) => [min * 0.99, max * 1.01];
 
 const MetricHistoryChart = ({
   data: { ticks: chartData, history = {} },
@@ -152,26 +137,9 @@ const MetricHistoryChart = ({
 }) => {
   const { all_time, last_24 } = history;
   return (
-    <div style={{ minWidth: 600 }}>
+    <div className="metric-history-chart" style={{ maxWidth: "95%" }}>
       <header>
         <h2>{source}</h2>
-        {all_time && last_24 && (
-          <>
-            <p>Statistics:</p>
-            <details>
-              <summary>Last 24 Hours</summary>
-              <p>Avg: {last_24.avg}</p>
-              <p>Min: {last_24.min}</p>
-              <p>Max: {last_24.max}</p>
-            </details>
-            <details>
-              <summary>All Time</summary>
-              <p>Avg: {all_time.avg}</p>
-              <p>Min: {all_time.min}</p>
-              <p>Max: {all_time.max}</p>
-            </details>
-          </>
-        )}
       </header>
       <main>
         <VictoryChart
@@ -229,6 +197,27 @@ const MetricHistoryChart = ({
           />
         </VictoryChart>
       </main>
+      <footer>
+        {all_time && last_24 && (
+          <details>
+            <summary>Statistics:</summary>
+            <div className="stats-container">
+              <div>
+                <strong>Last 24 Hours</strong>
+                <p>Avg: {last_24.avg}</p>
+                <p>Min: {last_24.min}</p>
+                <p>Max: {last_24.max}</p>
+              </div>
+              <div>
+                <strong>All Time</strong>
+                <p>Avg: {all_time.avg}</p>
+                <p>Min: {all_time.min}</p>
+                <p>Max: {all_time.max}</p>
+              </div>
+            </div>
+          </details>
+        )}
+      </footer>
     </div>
   );
 };
